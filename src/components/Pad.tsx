@@ -8,18 +8,36 @@ interface Props {
   title: string;
   padIndex: number;
   isActive: boolean;
+  uiDisabled: boolean;
 }
 
-const Pad = ({d, fill, classNames, title, padIndex, isActive}: Props) => {
+const Pad = ({d, fill, classNames, title, padIndex, isActive, uiDisabled}: Props) => {
+  const handleStartTone = (event: React.MouseEvent) => {
+    if(uiDisabled) {
+      return;
+    }
+    startTone(padIndex);
+  };
+
+  const handleStopTone = () => {
+    if(uiDisabled) {
+      return;
+    }
+    stopTone(padIndex);
+  };
+
   return (
     <svg>
       <title>{title}</title>
       <path
-        onMouseDown={() => startTone(padIndex)}
-        onMouseUp={() => stopTone(padIndex)}
-        onMouseLeave={() => stopTone(padIndex)}
+        onMouseDown={handleStartTone}
+        onMouseUp={handleStopTone}
+        onMouseLeave={handleStopTone}
         d={d}
-        className={`${css.Pad} ${classNames} ${isActive ? css.active : ''}`}
+        className={`
+          ${css.Pad} ${classNames || ""} 
+          ${isActive ? css.active : ''} 
+        `}
         fill={fill}
       />
     </svg>
