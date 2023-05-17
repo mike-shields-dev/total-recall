@@ -1,3 +1,5 @@
+import css from "./Pad.module.css";
+
 interface Props {
   d: string;
   fill: string;
