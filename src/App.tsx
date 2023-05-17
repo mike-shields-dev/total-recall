@@ -1,4 +1,5 @@
 import "./App.css";
+import { startTone, stopTone } from "./AudioContext";
 import Pad from "./components/Pad";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
         <Pad
+          padIndex={0}
           title="pad 1"
           d="
             M 160 80 
@@ -23,6 +25,7 @@ function App() {
           fill="hsl(0, 100%, 50%)"
         />
         <Pad
+          padIndex={1}
           title="pad 2"
           d="
             M 220 160 
@@ -34,6 +37,7 @@ function App() {
           fill="hsl(120, 100%, 50%)"
         />
         <Pad
+          padIndex={2}
           title="pad 3"
           d="
             M 145 220 
@@ -46,6 +50,7 @@ function App() {
           fill="hsl(240, 100%, 50%)"
         />
         <Pad
+          padIndex={3}
           title="pad 4"
           d="
             M 80 145 
@@ -56,7 +61,7 @@ function App() {
           "
           fill="rgb(255, 255, 0)"
         />
-      </svg>
+      </svg> 
     </>
   );
 }
