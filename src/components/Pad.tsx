@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 import { startTone, stopTone } from "../AudioContext";
 import css from "./Pad.module.css";
 
