@@ -5,3 +5,7 @@
 .Pad:active {
   filter: brightness(1) saturate(1);
 }
+
+.active {
+  filter: brightness(1) saturate(1);
+}

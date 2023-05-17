@@ -1,10 +1,13 @@
-import "./App.css";
+import { useState } from "react";
 import { startTone, stopTone } from "./AudioContext";
 import Pad from "./components/Pad";
+import "./App.css";
 
 function App() {
   const sequence = [0, 1, 2, 3];
   const interval = 500;
+  const [activePad, setActivePad] = useState<number | null>(null);
+
   function playSequence() {
     sequence.forEach((event, i) => {
       const startTime = i * 500
@@ -31,6 +34,7 @@ function App() {
         <circle cx={150} cy={150} r={55} fill="grey" />
         <circle onClick={() => playSequence()} cx={150} cy={150} r={10} fill="red" />
         <Pad
+          isActive={activePad === 0}
           padIndex={0}
           title="pad 1"
           d="
@@ -44,6 +48,7 @@ function App() {
           fill="hsl(0, 100%, 50%)"
         />
         <Pad
+          isActive={activePad === 1}
           padIndex={1}
           title="pad 2"
           d="
@@ -56,6 +61,7 @@ function App() {
           fill="hsl(120, 100%, 50%)"
         />
         <Pad
+          isActive={activePad === 2}
           padIndex={2}
           title="pad 3"
           d="
@@ -69,6 +75,7 @@ function App() {
           fill="hsl(240, 100%, 50%)"
         />
         <Pad
+          isActive={activePad === 3}
           padIndex={3}
           title="pad 4"
           d="
@@ -81,7 +88,7 @@ function App() {
           fill="rgb(255, 255, 0)"
         />
       </svg> 
-    </>
+    </div>
   );
 }
 
