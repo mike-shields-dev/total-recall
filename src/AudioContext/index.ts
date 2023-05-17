@@ -43,4 +43,4 @@ function stopTone(index: number) {
   tones = tones.filter(tone => !foundTone);
 }
 
-export { startTone, stopTone};
+export { startTone, stopTone };

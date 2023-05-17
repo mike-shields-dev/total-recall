@@ -3,14 +3,33 @@ import { startTone, stopTone } from "./AudioContext";
 import Pad from "./components/Pad";
 
 function App() {
+  const sequence = [0, 1, 2, 3];
+  const interval = 500;
+  function playSequence() {
+    sequence.forEach((event, i) => {
+      const startTime = i * 500
+      const stopTime = (interval * 0.9) + (i * 500)
+      setTimeout(() => {
+        startTone(event)
+        setActivePad(event)
+      }, startTime)
+
+      setTimeout(() => {
+          stopTone(event)
+          setActivePad(null)
+      }, stopTime)
+    });
+  }
+
   return (
-    <>
+    <div style={{ padding: "1em"}}>
       <svg
-        style={{ border: "1px solid red", aspectRatio: 1 }}
+        style={{ aspectRatio: 1 }}
         viewBox="0 0 300 300"
       >
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
+        <circle onClick={() => playSequence()} cx={150} cy={150} r={10} fill="red" />
         <Pad
           padIndex={0}
           title="pad 1"
