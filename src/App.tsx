@@ -1,4 +1,5 @@
 import "./App.css";
+import Pad from "./components/Pad";
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       >
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
-        <path
+        <Pad
+          title="pad 1"
           d="
             M 160 80 
             L 160 15
@@ -18,9 +20,10 @@ function App() {
             A 70 70 1 0 0 160 80
             z   
           "
-          fill="#f00"
+          fill="hsl(0, 100%, 50%)"
         />
-        <path
+        <Pad
+          title="pad 2"
           d="
             M 220 160 
             L 285 160
@@ -28,9 +31,10 @@ function App() {
             L 160 220
             A 70 70 1 0 0 220 160   
           "
-          fill="#0f0"
+          fill="hsl(120, 100%, 50%)"
         />
-        <path
+        <Pad
+          title="pad 3"
           d="
             M 145 220 
             L 145 285
@@ -39,9 +43,10 @@ function App() {
             A 70 70 1 0 0 145 220
             z
           "
-          fill="#00f"
+          fill="hsl(240, 100%, 50%)"
         />
-        <path
+        <Pad
+          title="pad 4"
           d="
             M 80 145 
             L 15 145
@@ -49,7 +54,7 @@ function App() {
             L 145 80
             A 70 70 1 0 0 80 145   
           "
-          fill="#ff0"
+          fill="rgb(255, 255, 0)"
         />
       </svg>
     </>
