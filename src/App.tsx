@@ -12,8 +12,7 @@ function App() {
   const [uiDisabled, setUiDisabled] = useState(false);
 
   function playPattern(events: number[]) {
-  function playSequence() {
-    if(uiDisabled) return;
+    setUiDisabled(true);
     
     Tone.Transport
       .stop()
@@ -24,6 +23,7 @@ function App() {
     const padLightDuration = 1000 * noteDuration;
     
     const pattern  = new Tone.Sequence((time, eventsItem) => {
+      if(eventsItem === -1) return setUiDisabled(false);
 
       synth.triggerAttackRelease(padNotes[eventsItem], noteDuration);
       setTimeout(() => setActiveTone(-1), padLightDuration);
