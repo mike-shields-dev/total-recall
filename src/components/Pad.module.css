@@ -2,10 +2,6 @@
   filter: brightness(0.8) saturate(0.8);
 }
 
-.Pad:active {
-  filter: brightness(1) saturate(1);
-}
-
 .active {
   filter: brightness(1) saturate(1);
 }

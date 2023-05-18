@@ -1,29 +1,38 @@
+import { useState, useEffect } from "react";
 import { startTone, stopTone } from "../AudioContext";
 import css from "./Pad.module.css";
 
 interface Props {
-  d: string;
+  pathData: string;
   fill: string;
   classNames?: string;
   title: string;
   padIndex: number;
-  isActive: boolean;
+  activeTone: number;
   uiDisabled: boolean;
 }
 
-const Pad = ({d, fill, classNames, title, padIndex, isActive, uiDisabled}: Props) => {
+const Pad = ({pathData, fill, classNames, title, padIndex, activeTone, uiDisabled}: Props) => {
+  const [isPadActive, setIsPadActive] = useState(false);
+  
+  useEffect(() => {
+      setIsPadActive(activeTone === padIndex);
+  }, [activeTone]);
+  
   const handleStartTone = (event: React.MouseEvent) => {
-    if(uiDisabled) {
-      return;
-    }
+    if(event.button !== 0) return;
+    if(uiDisabled) return;
+    
     startTone(padIndex);
+    setIsPadActive(true);
   };
 
-  const handleStopTone = () => {
-    if(uiDisabled) {
-      return;
-    }
+  const handleStopTone = (event: React.MouseEvent) => {
+    if(event.button !== 0) return;
+    if(uiDisabled) return;
+    
     stopTone(padIndex);
+    setIsPadActive(false);
   };
 
   return (
@@ -33,10 +42,11 @@ const Pad = ({d, fill, classNames, title, padIndex, isActive, uiDisabled}: Props
         onMouseDown={handleStartTone}
         onMouseUp={handleStopTone}
         onMouseLeave={handleStopTone}
-        d={d}
+        onContextMenu={(e) => e.preventDefault()}
+        d={pathData}
         className={`
           ${css.Pad} ${classNames || ""} 
-          ${isActive ? css.active : ''} 
+          ${isPadActive ? css.active : ''} 
         `}
         fill={fill}
       />

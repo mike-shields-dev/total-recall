@@ -6,13 +6,11 @@ import "./App.css";
 function App() {
   const sequence = [0, 1, 2, 3, 3, 1, 0, 2, 1, 2, 0, 3];
   const interval = 500;
-  const [activePad, setActivePad] = useState<number | null>(null);
+  const [activeTone, setActiveTone] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
 
   function playSequence() {
-    if(uiDisabled) {
-      return;
-    }
+    if(uiDisabled) return;
 
     sequence.forEach((event, i) => {
       const startTime = i * 500
@@ -21,12 +19,12 @@ function App() {
 
       setTimeout(() => {
         startTone(event)
-        setActivePad(event)
+        setActiveTone(event)
       }, startTime)
 
       setTimeout(() => {
           stopTone(event)
-          setActivePad(null)
+          setActiveTone(-1)
           if(event === sequence.at(-1)) {
             setUiDisabled(false)
           }
@@ -45,10 +43,10 @@ function App() {
         <circle onClick={() => playSequence()} cx={150} cy={150} r={10} fill="red" />
         <Pad
           uiDisabled={uiDisabled}
-          isActive={activePad === 0}
+          activeTone={activeTone}
           padIndex={0}
           title="pad 1"
-          d="
+          pathData="
             M 160 80 
             L 160 15
             A 135 135 1 0 1 285 145
@@ -60,10 +58,10 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          isActive={activePad === 1}
+          activeTone={activeTone}
           padIndex={1}
           title="pad 2"
-          d="
+          pathData="
             M 220 160 
             L 285 160
             A 135 135 1 0 1 160 285
@@ -75,10 +73,10 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          isActive={activePad === 2}
+          activeTone={activeTone}
           padIndex={2}
           title="pad 3"
-          d="
+          pathData="
             M 145 220 
             L 145 285
             A 135 135 1 0 1 15 160
@@ -90,10 +88,10 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          isActive={activePad === 3}
+          activeTone={activeTone}
           padIndex={3}
           title="pad 4"
-          d="
+          pathData="
             M 80 145 
             L 15 145
             A 135 135 1 0 1 145 15
