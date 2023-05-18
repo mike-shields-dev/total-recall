@@ -1,46 +1,27 @@
-const actx = new AudioContext({ sampleRate: 12000 });
+import * as Tone from "tone";
 
-const masterVol = actx.createGain();
-masterVol.gain.setValueAtTime(0.05, actx.currentTime);
-masterVol.connect(actx.destination);
+const outputVolume = new Tone.Gain(0.125).toDestination();
+const synth = new Tone.Synth({
+  oscillator: {
+    type: "square",
+  },
+}).connect(outputVolume);
 
-interface Tone {
-  id: number;
-  oscillator: OscillatorNode
-};
+const notes = ["E4", "A3", "C4", "A4", "E2"];
+let tones: number[] = [];
 
-const frequencies = [329.628, 220, 261.6, 440, 82];
-let tones = <Tone[]>[];
-
-function findTone(index: number) {
-  return tones.find(tone => tone.id === index);
-}
-
-function startTone(index: number) {
-  const existingTone = findTone(index);
-  
-  if(existingTone) return;
-  
-  const tone = {
-    id: index,
-    oscillator: actx.createOscillator()
-  }
-
-  tone.oscillator.frequency.setValueAtTime(frequencies[index], actx.currentTime);
-  tone.oscillator.type = "square";
-  tone.oscillator.connect(masterVol);
-  tone.oscillator.start();
-  
+function startTone(tone: number) {
+  if (tones.includes(tone)) return;
+  synth.triggerAttack(notes[tone]);
   tones.push(tone);
 }
 
-function stopTone(index: number) {
-  const foundTone = tones.find(tone => tone.id === index);
+function stopTone(tone: number) {
+  const isExistingTone = tones.includes(tone);
+  if (!isExistingTone) return;
 
-  foundTone?.oscillator.stop();
-  foundTone?.oscillator.disconnect();
-
-  tones = tones.filter(tone => !foundTone);
+  synth.triggerRelease();
+  tones = tones.filter((t) => t !== tone);
 }
 
 export { startTone, stopTone };
