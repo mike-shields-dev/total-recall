@@ -10,12 +10,14 @@ specifiers:
   eslint-plugin-react-refresh: ^0.3.4
   react: ^18.2.0
   react-dom: ^18.2.0
+  tone: ^14.7.77
   typescript: ^5.0.4
   vite: ^4.3.2
 
 dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  tone: 14.7.77
 
 devDependencies:
   '@types/react': 18.2.6
@@ -29,6 +31,13 @@ devDependencies:
   vite: 4.3.7
 
 packages:
+
+  /@babel/runtime/7.21.5:
+    resolution: {integrity: sha512-8jI69toZqqcsnqGGqwGS4Qb1VwLOEp4hz+CXPywcvjs60u3B4Pom/U/7rm4W8tMOYEB+E9wgD0mW1l3r8qlI9Q==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@esbuild/android-arm/0.17.19:
     resolution: {integrity: sha512-rIKddzqhmav7MSmoFCmDIb6e2W57geRsM94gV2l38fzhXMwq7hZoClug9USI2pFRGL06f4IOPHHpFNOkWieR8A==}
@@ -527,6 +536,14 @@ packages:
       es-shim-unscopables: 1.0.0
       get-intrinsic: 1.2.1
     dev: true
+
+  /automation-events/6.0.1:
+    resolution: {integrity: sha512-AHpETuZtlDy9/lupkn7GZIpUxgAlx7AjVGU6uh04wrrMawNf9Zjr6Erl/QoHRhQvIGMdFrs+6B2ngkh50lNJ9w==}
+    engines: {node: '>=16.1.0'}
+    dependencies:
+      '@babel/runtime': 7.21.5
+      tslib: 2.5.1
+    dev: false
 
   /available-typed-arrays/1.0.5:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
@@ -1447,6 +1464,10 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
+
   /regexp.prototype.flags/1.5.0:
     resolution: {integrity: sha512-0SutC3pNudRKgquxGoRGIz946MZVHqbNfPjBdxeOhBrdgDKlRoXmYLQN9xRbrR09ZXWeGAdPuif7egofn6v5LA==}
     engines: {node: '>= 0.4'}
@@ -1540,6 +1561,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /standardized-audio-context/25.3.46:
+    resolution: {integrity: sha512-kI7oM1IrGUawaBgCizRnVuS/+xSwRzwEDSqDkvJASAh+0IwuxUBYJFG4JSuaD6OkLQVg5i8oCf5aLOBX4dfVPw==}
+    dependencies:
+      '@babel/runtime': 7.21.5
+      automation-events: 6.0.1
+      tslib: 2.5.1
+    dev: false
+
   /string.prototype.matchall/4.0.8:
     resolution: {integrity: sha512-6zOCOcJ+RJAQshcTvXPHoxoQGONa3e/Lqx90wUA+wEzX78sg5Bo+1tQo4N0pohS0erG9qtCqJDjNCQBjeWVxyg==}
     dependencies:
@@ -1605,6 +1634,17 @@ packages:
   /text-table/0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
+
+  /tone/14.7.77:
+    resolution: {integrity: sha512-tCfK73IkLHyzoKUvGq47gyDyxiKLFvKiVCOobynGgBB9Dl0NkxTM2p+eRJXyCYrjJwy9Y0XCMqD3uOYsYt2Fdg==}
+    dependencies:
+      standardized-audio-context: 25.3.46
+      tslib: 2.5.1
+    dev: false
+
+  /tslib/2.5.1:
+    resolution: {integrity: sha512-KaI6gPil5m9vF7DKaoXxx1ia9fxS4qG5YveErRRVknPDXXriu5M8h48YRjB6h5ZUOKuAKlSJYb0GaDe8I39fRw==}
+    dev: false
 
   /type-check/0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
