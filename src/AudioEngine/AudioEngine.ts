@@ -37,8 +37,8 @@ function startSequencer() {
   Tone.Transport.start();
 }
 
-function playNote(noteName: string, duration: number) {
-  synth.triggerAttackRelease(noteName, duration);
+function playNote(noteName: string, duration: number, time: number) {
+  synth.triggerAttackRelease(noteName, duration, time);
 };
 
 export { startTone, stopTone, synth, resetSequencer, startSequencer, playNote };

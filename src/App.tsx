@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
-  synth,
   startSequencer,
   resetSequencer,
   playNote,
 } from "./AudioEngine/AudioEngine";
+
 import { noteNames, BPM } from "./globals";
 import createPadSequence from "./utils/createPadSequence";
 import * as Tone from "tone";
@@ -14,8 +14,13 @@ import "./App.css";
 function App() {
   const [activeNote, setActiveNote] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
-  const flashRef = useRef(0);
+  const flashTimerRef = useRef(0);
   const cuePoint = 0;
+  
+  function handleStart() {
+    const padSequence = createPadSequence(8)
+    playSequence(padSequence);
+  }
 
   function playSequence(padSequence: number[]) {
     setUiDisabled(true);
@@ -24,12 +29,11 @@ function App() {
     const noteDuration = 0.3 * (60 / BPM);
     const flashDuration = 1000 * noteDuration;
 
-    const noteSequence = new Tone.Sequence((_, padIndex) => {
-      const hasSequencedEnded = padIndex === -1;
-      if (hasSequencedEnded) return setUiDisabled(false);
+    const noteSequence = new Tone.Sequence((time, padIndex) => {
+      const isSequenceComplete = padIndex < 0;
+      if (isSequenceComplete) return setUiDisabled(false);
 
-      playNote(noteNames[padIndex], noteDuration);
-      setActiveNote(padIndex);
+      playNote(noteNames[padIndex], noteDuration, time);
       flashPad(padIndex, flashDuration);
         
     }, padSequence).start(cuePoint);
@@ -41,15 +45,16 @@ function App() {
 
   function flashPad(padIndex: number, flashDuration: number) {
     setActiveNote(padIndex);
-    clearTimeout(flashRef.current);
-    flashRef.current = 
+    clearTimeout(flashTimerRef.current);
+    
+    flashTimerRef.current = 
       setTimeout(() => setActiveNote(-1), flashDuration);
   }
 
-  function handleStart() {
-    const padSequence = createPadSequence(8)
-    playSequence(padSequence);
-  }
+
+  useEffect(() => {
+    return () => clearTimeout(flashTimerRef.current);
+  }, []);
 
   return (
     <div style={{ padding: "1em" }}>
