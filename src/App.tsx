@@ -1,35 +1,56 @@
 import { useState } from "react";
-import { startTone, stopTone } from "./AudioEngine";
+import { synth } from "./AudioEngine";
+import { padNotes } from "./globals";
+import * as Tone from "tone";
 import Pad from "./components/Pad";
 import "./App.css";
 
+const BPM = 120
+
 function App() {
-  const sequence = [0, 1, 2, 3, 3, 1, 0, 2, 1, 2, 0, 3];
-  const interval = 500;
   const [activeTone, setActiveTone] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
 
+  function playPattern(events: number[]) {
   function playSequence() {
     if(uiDisabled) return;
+    
+    Tone.Transport
+      .stop()
+      .cancel()
+      .set({ bpm: BPM })
 
-    sequence.forEach((event, i) => {
-      const startTime = i * 500
-      const stopTime = (interval * 0.9) + (i * 500)
-      setUiDisabled(true);
+    const noteDuration = 0.3 * (60 / BPM);
+    const padLightDuration = 1000 * noteDuration;
+    
+    const pattern  = new Tone.Sequence((time, eventsItem) => {
 
-      setTimeout(() => {
-        startTone(event)
-        setActiveTone(event)
-      }, startTime)
+      synth.triggerAttackRelease(padNotes[eventsItem], noteDuration);
+      setTimeout(() => setActiveTone(-1), padLightDuration);
+      setActiveTone(eventsItem);
+    }, events).start(0);
+  
+    pattern.loop = false;
+    
+    Tone.Transport.start();
+  }
 
-      setTimeout(() => {
-          stopTone(event)
-          setActiveTone(-1)
-          if(event === sequence.at(-1)) {
-            setUiDisabled(false)
-          }
-      }, stopTime)
-    });
+  function generateEvents(length: number) {
+    const events: number[] = [];
+
+    while(events.length < length) {
+      const event = Math.floor(Math.random() * 4);
+      
+      if(`${events.slice(-2)}` === `${[event, event]}`) continue;
+      
+      events.push(event);
+    }
+
+    return [...events, -1];
+  }
+
+  function handleStart() {
+    playPattern(generateEvents(8));
   }
 
   return (
@@ -40,7 +61,7 @@ function App() {
       >
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
-        <circle onClick={() => playSequence()} cx={150} cy={150} r={10} fill="red" />
+        <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
         <Pad
           uiDisabled={uiDisabled}
           activeTone={activeTone}

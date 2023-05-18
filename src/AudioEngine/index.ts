@@ -1,18 +1,20 @@
 import * as Tone from "tone";
+import { padNotes } from "../globals";
 
-const outputVolume = new Tone.Gain(0.125).toDestination();
+const outputVolume = new Tone.Gain(0.075).toDestination();
 const synth = new Tone.Synth({
+  envelope: { attack: 0.02, release: 0.1 },
   oscillator: {
     type: "square",
   },
 }).connect(outputVolume);
 
-const notes = ["E4", "A3", "C4", "A4", "E2"];
+
 let tones: number[] = [];
 
 function startTone(tone: number) {
   if (tones.includes(tone)) return;
-  synth.triggerAttack(notes[tone]);
+  synth.triggerAttack(padNotes[tone]);
   tones.push(tone);
 }
 
@@ -24,4 +26,4 @@ function stopTone(tone: number) {
   tones = tones.filter((t) => t !== tone);
 }
 
-export { startTone, stopTone };
+export { startTone, stopTone, synth };
