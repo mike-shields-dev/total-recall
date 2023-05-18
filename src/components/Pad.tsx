@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { startTone, stopTone } from "../AudioEngine";
+import { startTone, stopTone } from "../AudioEngine/AudioEngine";
 import css from "./Pad.module.css";
 
 interface Props {
@@ -8,16 +8,16 @@ interface Props {
   classNames?: string;
   title: string;
   padIndex: number;
-  activeTone: number;
+  activeNote: number;
   uiDisabled: boolean;
 }
 
-const Pad = ({pathData, fill, classNames, title, padIndex, activeTone, uiDisabled}: Props) => {
+const Pad = ({pathData, fill, classNames, title, padIndex, activeNote, uiDisabled}: Props) => {
   const [isPadActive, setIsPadActive] = useState(false);
   
   useEffect(() => {
-      setIsPadActive(activeTone === padIndex);
-  }, [activeTone]);
+      setIsPadActive(activeNote === padIndex);
+  }, [activeNote]);
   
   const handleStartTone = (event: React.MouseEvent) => {
     if(event.button !== 0) return;

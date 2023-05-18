@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { padNotes } from "../globals";
+import { noteNames, BPM } from "../globals";
 
 const outputVolume = new Tone.Gain(0.075).toDestination();
 const synth = new Tone.Synth({
@@ -14,7 +14,7 @@ let tones: number[] = [];
 
 function startTone(tone: number) {
   if (tones.includes(tone)) return;
-  synth.triggerAttack(padNotes[tone]);
+  synth.triggerAttack(noteNames[tone]);
   tones.push(tone);
 }
 
@@ -26,4 +26,19 @@ function stopTone(tone: number) {
   tones = tones.filter((t) => t !== tone);
 }
 
-export { startTone, stopTone, synth };
+function resetSequencer() {
+  Tone.Transport
+    .stop()
+    .cancel()
+    .set({ bpm: BPM });
+}
+
+function startSequencer() {
+  Tone.Transport.start();
+}
+
+function playNote(noteName: string, duration: number) {
+  synth.triggerAttackRelease(noteName, duration);
+};
+
+export { startTone, stopTone, synth, resetSequencer, startSequencer, playNote };

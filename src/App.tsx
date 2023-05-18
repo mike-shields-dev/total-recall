@@ -1,70 +1,65 @@
-import { useState } from "react";
-import { synth } from "./AudioEngine";
-import { padNotes } from "./globals";
+import { useState, useRef } from "react";
+import {
+  synth,
+  startSequencer,
+  resetSequencer,
+  playNote,
+} from "./AudioEngine/AudioEngine";
+import { noteNames, BPM } from "./globals";
+import createPadSequence from "./utils/createPadSequence";
 import * as Tone from "tone";
 import Pad from "./components/Pad";
 import "./App.css";
 
-const BPM = 120
-
 function App() {
-  const [activeTone, setActiveTone] = useState<number>(-1);
+  const [activeNote, setActiveNote] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
+  const flashRef = useRef(0);
+  const cuePoint = 0;
 
-  function playPattern(events: number[]) {
+  function playSequence(padSequence: number[]) {
     setUiDisabled(true);
-    
-    Tone.Transport
-      .stop()
-      .cancel()
-      .set({ bpm: BPM })
+    resetSequencer();
 
     const noteDuration = 0.3 * (60 / BPM);
-    const padLightDuration = 1000 * noteDuration;
-    
-    const pattern  = new Tone.Sequence((time, eventsItem) => {
-      if(eventsItem === -1) return setUiDisabled(false);
+    const flashDuration = 1000 * noteDuration;
 
-      synth.triggerAttackRelease(padNotes[eventsItem], noteDuration);
-      setTimeout(() => setActiveTone(-1), padLightDuration);
-      setActiveTone(eventsItem);
-    }, events).start(0);
-  
-    pattern.loop = false;
-    
-    Tone.Transport.start();
+    const noteSequence = new Tone.Sequence((_, padIndex) => {
+      const hasSequencedEnded = padIndex === -1;
+      if (hasSequencedEnded) return setUiDisabled(false);
+
+      playNote(noteNames[padIndex], noteDuration);
+      setActiveNote(padIndex);
+      flashPad(padIndex, flashDuration);
+        
+    }, padSequence).start(cuePoint);
+
+    noteSequence.loop = false;
+
+    startSequencer();
   }
 
-  function generateEvents(length: number) {
-    const events: number[] = [];
-
-    while(events.length < length) {
-      const event = Math.floor(Math.random() * 4);
-      
-      if(`${events.slice(-2)}` === `${[event, event]}`) continue;
-      
-      events.push(event);
-    }
-
-    return [...events, -1];
+  function flashPad(padIndex: number, flashDuration: number) {
+    setActiveNote(padIndex);
+    clearTimeout(flashRef.current);
+    flashRef.current = 
+      setTimeout(() => setActiveNote(-1), flashDuration);
   }
 
   function handleStart() {
-    playPattern(generateEvents(8));
+    const padSequence = createPadSequence(8)
+    playSequence(padSequence);
   }
 
   return (
-    <div style={{ padding: "1em"}}>
-      <svg
-        style={{ aspectRatio: 1 }}
-        viewBox="0 0 300 300"
-      >
+    <div style={{ padding: "1em" }}>
+      <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
         <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
         <Pad
           uiDisabled={uiDisabled}
-          activeTone={activeTone}
+          activeNote={activeNote}
           padIndex={0}
           title="pad 1"
           pathData="
@@ -79,7 +74,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeTone={activeTone}
+          activeNote={activeNote}
           padIndex={1}
           title="pad 2"
           pathData="
@@ -94,7 +89,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeTone={activeTone}
+          activeNote={activeNote}
           padIndex={2}
           title="pad 3"
           pathData="
@@ -109,7 +104,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeTone={activeTone}
+          activeNote={activeNote}
           padIndex={3}
           title="pad 4"
           pathData="
@@ -122,7 +117,7 @@ function App() {
           "
           fill="rgb(255, 255, 0)"
         />
-      </svg> 
+      </svg>
     </div>
   );
 }
