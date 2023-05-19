@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/pubsub-js': ^1.8.3
   '@types/react': ^18.0.28
   '@types/react-dom': ^18.2.4
   '@vitejs/plugin-react-swc': ^3.0.0
@@ -8,6 +9,7 @@ specifiers:
   eslint-plugin-react: ^7.32.2
   eslint-plugin-react-hooks: ^4.6.0
   eslint-plugin-react-refresh: ^0.3.4
+  pubsub-js: ^1.9.4
   react: ^18.2.0
   react-dom: ^18.2.0
   tone: ^14.7.77
@@ -15,11 +17,13 @@ specifiers:
   vite: ^4.3.2
 
 dependencies:
+  pubsub-js: 1.9.4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   tone: 14.7.77
 
 devDependencies:
+  '@types/pubsub-js': 1.8.3
   '@types/react': 18.2.6
   '@types/react-dom': 18.2.4
   '@vitejs/plugin-react-swc': 3.3.1_vite@4.3.7
@@ -429,6 +433,10 @@ packages:
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+    dev: true
+
+  /@types/pubsub-js/1.8.3:
+    resolution: {integrity: sha512-6BqY04dh2UV1dNV690tyJVJYQ0U6qBH4tU+FCwY1Mhl8jOPOP9qiIvgLnB59cVik/E6/R002oXZpGiDm+2C8eA==}
     dev: true
 
   /@types/react-dom/18.2.4:
@@ -1433,6 +1441,10 @@ packages:
       object-assign: 4.1.1
       react-is: 16.13.1
     dev: true
+
+  /pubsub-js/1.9.4:
+    resolution: {integrity: sha512-hJYpaDvPH4w8ZX/0Fdf9ma1AwRgU353GfbaVfPjfJQf1KxZ2iHaHl3fAUw1qlJIR5dr4F3RzjGaWohYUEyoh7A==}
+    dev: false
 
   /punycode/2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
