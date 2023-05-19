@@ -11,7 +11,6 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={0}
-      title="pad 1"
       pathData="
         M 160 80 
         L 160 15
@@ -26,7 +25,6 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={1}
-      title="pad 2"
       pathData="
         M 220 160 
         L 285 160
@@ -41,7 +39,6 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={2}
-      title="pad 3"
       pathData="
         M 145 220 
         L 145 285
@@ -56,7 +53,6 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={3}
-      title="pad 4"
       pathData="
         M 80 145 
         L 15 145

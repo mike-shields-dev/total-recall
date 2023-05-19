@@ -7,13 +7,12 @@ interface Props {
   pathData: string;
   fill: string;
   classNames?: string;
-  title: string;
   padIndex: number;
   activePadIndex: number;
   uiDisabled: boolean;
 }
 
-const Pad = ({pathData, fill, classNames, title, padIndex, activePadIndex, uiDisabled}: Props) => {
+const Pad = ({pathData, fill, classNames, padIndex, activePadIndex, uiDisabled}: Props) => {
   const [isPadActive, setIsPadActive] = useState(false);
   
   useEffect(() => {
@@ -38,7 +37,6 @@ const Pad = ({pathData, fill, classNames, title, padIndex, activePadIndex, uiDis
 
   return (
     <svg>
-      <title>{title}</title>
       <path
         onMouseDown={handleStartTone}
         onMouseUp={handleStopTone}

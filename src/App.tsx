@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PubSub from "pubsub-js";
-import createPadSequence from "./utils/createPadSequence";
+
 import {
   ACTIVE_PAD_INDEX,
   SEQUENCER_PLAY,
@@ -14,14 +14,14 @@ import Pads from "./components/Pads";
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
-  const [sequenceLength, setSequenceLength] = useState(2)
+  const [sequence, setSequence] = useState<number[]>([-1]);
 
   function handleStart() {
     if(uiDisabled) return;
-
-    const padSequence = createPadSequence(sequenceLength);
+    const nextSequence = [...sequence.slice(0, -1), Math.floor(Math.random() * 4), -1]
     setUiDisabled(true);
-    PubSub.publish(SEQUENCER_PLAY, padSequence);
+    PubSub.publish(SEQUENCER_PLAY, nextSequence);
+    setSequence(nextSequence);
   }
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function App() {
     <div style={{ padding: "1em" }}>
       <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
-        <circle cx={150} cy={150} r={55} fill="grey" />
+        <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
         <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
         <path d="M 145 145 L 154 150 L145 155 z" transform="translate(2, 0)" pointerEvents="none" />
 
