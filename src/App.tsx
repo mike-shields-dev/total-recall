@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
 import PubSub from "pubsub-js";
-
 import {
   ACTIVE_PAD_INDEX,
   SEQUENCER_PLAY,
   SEQUENCE_ENDED,
   SEQUENCE_STARTED,
 } from "./AudioEngine/PubSubNameSpace";
-
-import "./App.css";
 import Pads from "./components/Pads";
+import { noteNames } from "./globals";
+import "./App.css";
 
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
-  const [sequence, setSequence] = useState<number[]>([-1]);
+  const [gameSequence, setGameSequence] = useState<number[]>([]);
 
   function handleStart() {
-    if(uiDisabled) return;
-    const nextSequence = [...sequence.slice(0, -1), Math.floor(Math.random() * 4), -1]
+    if (uiDisabled) return;
     setUiDisabled(true);
-    PubSub.publish(SEQUENCER_PLAY, nextSequence);
-    setSequence(nextSequence);
+    const newStep = Math.floor(Math.random() * noteNames.length);
+    const newSequence = [...gameSequence, newStep];
+
+    setGameSequence(newSequence);
+    PubSub.publish(SEQUENCER_PLAY, newSequence);
   }
 
   useEffect(() => {

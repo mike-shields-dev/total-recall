@@ -33,7 +33,6 @@ function playNote(noteName: string, durationMs: number, time: number) {
   synth.triggerAttackRelease(noteName, durationMs, time);
 }
 
-
 function playSequence(padSequence: number[]) {
   resetTransport();
 
@@ -48,7 +47,7 @@ function playSequence(padSequence: number[]) {
     PubSub.publish(ACTIVE_PAD_INDEX, padIndex);
     
     setTimeout(() => PubSub.publish(ACTIVE_PAD_INDEX, -1), durationMSecs)
-  }, padSequence).start(0);
+  }, [...padSequence, -1]).start(0);
   
   noteSequence.loop = false;
   
