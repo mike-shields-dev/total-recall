@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  startSequencer,
-  resetSequencer,
-  playNote,
-} from "./AudioEngine/AudioEngine";
+import { useState, useEffect } from "react";
+import PubSub from "pubsub-js";
 
-import { noteNames, BPM } from "./globals";
 import createPadSequence from "./utils/createPadSequence";
-import * as Tone from "tone";
 import Pad from "./components/Pad";
 import "./App.css";
+import {
+  ACTIVE_PAD_INDEX,
+  SEQUENCER_PLAY,
+  SEQUENCE_ENDED,
+  SEQUENCE_STARTED,
+} from "./AudioEngine/PubSubNameSpace";
 
 function App() {
-  const [activeNote, setActiveNote] = useState<number>(-1);
+  const [activePadIndex, setActivePadIndex] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
   const flashTimerRef = useRef(0);
   const cuePoint = 0;
@@ -22,38 +22,37 @@ function App() {
     playSequence(padSequence);
   }
 
-  function playSequence(padSequence: number[]) {
-    setUiDisabled(true);
-    resetSequencer();
-
-    const noteDuration = 0.3 * (60 / BPM);
-    const flashDuration = 1000 * noteDuration;
-
-    const noteSequence = new Tone.Sequence((time, padIndex) => {
-      const isSequenceComplete = padIndex < 0;
-      if (isSequenceComplete) return setUiDisabled(false);
-
-      playNote(noteNames[padIndex], noteDuration, time);
-      flashPad(padIndex, flashDuration);
-        
-    }, padSequence).start(cuePoint);
-
-    noteSequence.loop = false;
-
-    startSequencer();
+  function flashPads(padSequence: number[]) {
+    // setUiDisabled(true);
+    // resetSequencer();
+    // const noteDuration = 0.3 * (60 / BPM);
+    // const flashDuration = 1000 * noteDuration;
+    // const noteSequence = new Tone.Sequence((time, padIndex) => {
+    //   const isSequenceComplete = padIndex < 0;
+    //   if (isSequenceComplete) return setUiDisabled(false);
+    //   playNote(noteNames[padIndex], noteDuration, time);
+    //   flashPad(padIndex, flashDuration);
+    // }, padSequence).start(cuePoint);
+    // noteSequence.loop = false;
+    // startSequencer();
   }
-
-  function flashPad(padIndex: number, flashDuration: number) {
-    setActiveNote(padIndex);
-    clearTimeout(flashTimerRef.current);
-    
-    flashTimerRef.current = 
-      setTimeout(() => setActiveNote(-1), flashDuration);
-  }
-
 
   useEffect(() => {
-    return () => clearTimeout(flashTimerRef.current);
+    const onSequenceStarted = PubSub.subscribe(SEQUENCE_STARTED, () =>
+      setUiDisabled(true)
+    );
+    const onSequenceEnded = PubSub.subscribe(SEQUENCE_ENDED, () =>
+      setUiDisabled(false)
+    );
+    const onActivePadIndex = PubSub.subscribe(ACTIVE_PAD_INDEX, (_, index) =>
+      setActivePadIndex(index)
+    );
+
+    return () => {
+      PubSub.unsubscribe(onSequenceStarted);
+      PubSub.unsubscribe(onSequenceEnded);
+      PubSub.unsubscribe(onActivePadIndex);
+    };
   }, []);
 
   return (
@@ -61,10 +60,10 @@ function App() {
       <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
-        <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
+        <circle onClick={onStartLevel} cx={150} cy={150} r={10} fill="red" />
         <Pad
           uiDisabled={uiDisabled}
-          activeNote={activeNote}
+          activePadIndex={activePadIndex}
           padIndex={0}
           title="pad 1"
           pathData="
@@ -79,7 +78,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeNote={activeNote}
+          activePadIndex={activePadIndex}
           padIndex={1}
           title="pad 2"
           pathData="
@@ -94,7 +93,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeNote={activeNote}
+          activePadIndex={activePadIndex}
           padIndex={2}
           title="pad 3"
           pathData="
@@ -109,7 +108,7 @@ function App() {
         />
         <Pad
           uiDisabled={uiDisabled}
-          activeNote={activeNote}
+          activePadIndex={activePadIndex}
           padIndex={3}
           title="pad 4"
           pathData="

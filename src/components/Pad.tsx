@@ -8,16 +8,16 @@ interface Props {
   classNames?: string;
   title: string;
   padIndex: number;
-  activeNote: number;
+  activePadIndex: number;
   uiDisabled: boolean;
 }
 
-const Pad = ({pathData, fill, classNames, title, padIndex, activeNote, uiDisabled}: Props) => {
+const Pad = ({pathData, fill, classNames, title, padIndex, activePadIndex, uiDisabled}: Props) => {
   const [isPadActive, setIsPadActive] = useState(false);
   
   useEffect(() => {
-      setIsPadActive(activeNote === padIndex);
-  }, [activeNote]);
+      setIsPadActive(activePadIndex === padIndex);
+  }, [activePadIndex]);
   
   const handleStartTone = (event: React.MouseEvent) => {
     if(event.button !== 0) return;
