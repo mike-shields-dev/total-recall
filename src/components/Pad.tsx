@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { startTone, stopTone } from "../AudioEngine/AudioEngine";
+import PubSub from "pubsub-js";
+import { NOTE_OFF, NOTE_ON } from '../AudioEngine/PubSubNameSpace';
 import css from "./Pad.module.css";
 
 interface Props {
@@ -23,7 +24,7 @@ const Pad = ({pathData, fill, classNames, title, padIndex, activePadIndex, uiDis
     if(event.button !== 0) return;
     if(uiDisabled) return;
     
-    startTone(padIndex);
+    PubSub.publish(NOTE_ON, padIndex);
     setIsPadActive(true);
   };
 
@@ -31,7 +32,7 @@ const Pad = ({pathData, fill, classNames, title, padIndex, activePadIndex, uiDis
     if(event.button !== 0) return;
     if(uiDisabled) return;
     
-    stopTone(padIndex);
+    PubSub.publish(NOTE_OFF, padIndex);
     setIsPadActive(false);
   };
 
