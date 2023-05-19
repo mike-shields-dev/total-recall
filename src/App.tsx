@@ -14,11 +14,12 @@ import Pads from "./components/Pads";
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
+  const [sequenceLength, setSequenceLength] = useState(2)
 
   function handleStart() {
     if(uiDisabled) return;
 
-    const padSequence = createPadSequence(8);
+    const padSequence = createPadSequence(sequenceLength);
     setUiDisabled(true);
     PubSub.publish(SEQUENCER_PLAY, padSequence);
   }
@@ -47,6 +48,7 @@ function App() {
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
         <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
+        <path d="M 145 145 L 154 150 L145 155 z" transform="translate(2, 0)" pointerEvents="none" />
 
         <Pads uiDisabled={uiDisabled} activePadIndex={activePadIndex} />
       </svg>
