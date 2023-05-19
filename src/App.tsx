@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import PubSub from "pubsub-js";
-
 import createPadSequence from "./utils/createPadSequence";
 import Pad from "./components/Pad";
 import "./App.css";
@@ -14,27 +13,11 @@ import {
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
   const [uiDisabled, setUiDisabled] = useState(false);
-  const flashTimerRef = useRef(0);
-  const cuePoint = 0;
   
   function handleStart() {
     const padSequence = createPadSequence(8)
-    playSequence(padSequence);
-  }
-
-  function flashPads(padSequence: number[]) {
-    // setUiDisabled(true);
-    // resetSequencer();
-    // const noteDuration = 0.3 * (60 / BPM);
-    // const flashDuration = 1000 * noteDuration;
-    // const noteSequence = new Tone.Sequence((time, padIndex) => {
-    //   const isSequenceComplete = padIndex < 0;
-    //   if (isSequenceComplete) return setUiDisabled(false);
-    //   playNote(noteNames[padIndex], noteDuration, time);
-    //   flashPad(padIndex, flashDuration);
-    // }, padSequence).start(cuePoint);
-    // noteSequence.loop = false;
-    // startSequencer();
+    setUiDisabled(true);
+    PubSub.publish(SEQUENCER_PLAY, padSequence);
   }
 
   useEffect(() => {
@@ -60,7 +43,7 @@ function App() {
       <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" />
-        <circle onClick={onStartLevel} cx={150} cy={150} r={10} fill="red" />
+        <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
         <Pad
           uiDisabled={uiDisabled}
           activePadIndex={activePadIndex}
