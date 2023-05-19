@@ -3,11 +3,13 @@ import Pad from "./Pad";
 interface Props {
   uiDisabled: boolean;
   activePadIndex: number;
+  onUserAttempt: (padIndex: number) => void;
 };
 
-function Pads({ uiDisabled, activePadIndex }: Props) {
+function Pads({ uiDisabled, activePadIndex, onUserAttempt }: Props) {
   return (<>
       <Pad
+      onUserAttempt={onUserAttempt}
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={0}
@@ -22,6 +24,7 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       fill="hsl(0, 100%, 50%)"
     />
     <Pad
+      onUserAttempt={onUserAttempt}
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={1}
@@ -36,6 +39,7 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       fill="hsl(120, 100%, 50%)"
     />
     <Pad
+      onUserAttempt={onUserAttempt}
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={2}
@@ -50,6 +54,7 @@ function Pads({ uiDisabled, activePadIndex }: Props) {
       fill="hsl(240, 100%, 50%)"
     />
     <Pad
+      onUserAttempt={onUserAttempt}
       uiDisabled={uiDisabled}
       activePadIndex={activePadIndex}
       padIndex={3}

@@ -10,19 +10,20 @@ interface Props {
   padIndex: number;
   activePadIndex: number;
   uiDisabled: boolean;
+  onUserAttempt: (padIndex: number) => void;
 }
 
-const Pad = ({pathData, fill, classNames, padIndex, activePadIndex, uiDisabled}: Props) => {
+const Pad = ({pathData, fill, classNames, padIndex, activePadIndex, uiDisabled, onUserAttempt}: Props) => {
   const [isPadActive, setIsPadActive] = useState(false);
   
   useEffect(() => {
-      setIsPadActive(activePadIndex === padIndex);
+    setIsPadActive(activePadIndex === padIndex);
   }, [activePadIndex]);
   
   const handleStartTone = (event: React.MouseEvent) => {
     if(event.button !== 0) return;
     if(uiDisabled) return;
-    
+    onUserAttempt(padIndex);
     PubSub.publish(NOTE_ON, padIndex);
     setIsPadActive(true);
   };
