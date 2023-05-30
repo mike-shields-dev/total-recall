@@ -1,4 +1,5 @@
 import HealthStatus from './HealthStatus';
+import LevelStatus from './LevelStatus';
 
 interface Props {
   health: number;
@@ -9,6 +10,7 @@ function Header({ health, level }: Props) {
   return (
     <header>
       <HealthStatus health={health} />
+      <LevelStatus level={level} />
     </header>
   );
 }

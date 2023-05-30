@@ -94,7 +94,7 @@ function App() {
 
   return (
     <main onClick={enableAudio} style={{ height: "100vh", display: 'grid', placeContent: "center"}}>
-      <Header health={userHealth} />
+      <Header health={userHealth} level={gameLevel} />
       <svg style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
