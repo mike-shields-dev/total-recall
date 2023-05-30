@@ -9,7 +9,9 @@ import {
   FAILED_ATTEMPT,
 } from "./AudioEngine/PubSubNameSpace";
 import Pads from "./components/Pads";
+import Header from "./components/Header";
 import { noteNames, startingHealth } from "./globals";
+
 import "./App.css";
 
 function App() {
@@ -91,9 +93,9 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: "1em" }} onClick={enableAudio}>
-      <div>Health: {userHealth} Level: {gameLevel -1}</div>
-      <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
+    <main onClick={enableAudio} style={{ height: "100vh", display: 'grid', placeContent: "center"}}>
+      <Header health={userHealth} />
+      <svg style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
         <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
@@ -109,7 +111,7 @@ function App() {
           onPadPress={onPadPress}
         />
       </svg>
-    </div>
+    </main>
   );
 }
 
