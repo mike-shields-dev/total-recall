@@ -1,16 +1,16 @@
 import Pad from "./Pad";
 
 interface Props {
-  uiDisabled: boolean;
+  isSequencePlaying: boolean;
   activePadIndex: number;
-  onUserAttempt: (padIndex: number) => void;
+  onPadPress: (padIndex: number) => void;
 };
 
-function Pads({ uiDisabled, activePadIndex, onUserAttempt }: Props) {
+function Pads({ isSequencePlaying, activePadIndex, onPadPress }: Props) {
   return (<>
       <Pad
-      onUserAttempt={onUserAttempt}
-      uiDisabled={uiDisabled}
+      onPadPress={onPadPress}
+      isSequencePlaying={isSequencePlaying}
       activePadIndex={activePadIndex}
       padIndex={0}
       pathData="
@@ -24,8 +24,8 @@ function Pads({ uiDisabled, activePadIndex, onUserAttempt }: Props) {
       fill="hsl(0, 100%, 50%)"
     />
     <Pad
-      onUserAttempt={onUserAttempt}
-      uiDisabled={uiDisabled}
+      onPadPress={onPadPress}
+      isSequencePlaying={isSequencePlaying}
       activePadIndex={activePadIndex}
       padIndex={1}
       pathData="
@@ -39,8 +39,8 @@ function Pads({ uiDisabled, activePadIndex, onUserAttempt }: Props) {
       fill="hsl(120, 100%, 50%)"
     />
     <Pad
-      onUserAttempt={onUserAttempt}
-      uiDisabled={uiDisabled}
+      onPadPress={onPadPress}
+      isSequencePlaying={isSequencePlaying}
       activePadIndex={activePadIndex}
       padIndex={2}
       pathData="
@@ -54,8 +54,8 @@ function Pads({ uiDisabled, activePadIndex, onUserAttempt }: Props) {
       fill="hsl(240, 100%, 50%)"
     />
     <Pad
-      onUserAttempt={onUserAttempt}
-      uiDisabled={uiDisabled}
+      onPadPress={onPadPress}
+      isSequencePlaying={isSequencePlaying}
       activePadIndex={activePadIndex}
       padIndex={3}
       pathData="

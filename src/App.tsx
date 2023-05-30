@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { start as enableAudio } from "tone";
 import PubSub from "pubsub-js";
 import {
   ACTIVE_PAD_INDEX,
@@ -12,42 +13,73 @@ import "./App.css";
 
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
-  const [uiDisabled, setUiDisabled] = useState(false);
+  const [isSequencePlaying, setIsSequencePlaying] = useState(false);
   const [gameSequence, setGameSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
-  const [userHealth, setUserHealth] = useState(startingHealth); 
+  const [userHealth, setUserHealth] = useState(startingHealth);
+  const [isUsersAttempt, setIsUsersAttempt] = useState(false);
+  const [didUserAttempt, setDidUserAttempt] = useState(true);
+  const [gameLevel, setGameLevel] = useState(1);
 
   function handleStart() {
-    if (uiDisabled) return;
-    setUiDisabled(true);
-    const newStep = Math.floor(Math.random() * noteNames.length);
-    const newSequence = [...gameSequence, newStep];
+    if (isSequencePlaying) return;
+    if(!didUserAttempt) setUserHealth(userHealth - 1);
 
-    setGameSequence(newSequence);
-    setUserSequence([]);
-    PubSub.publish(SEQUENCER_PLAY, newSequence);
+    setIsSequencePlaying(true);
+
+    const newGameSequence = [...gameSequence];
+
+    if (newGameSequence.length < gameLevel) {
+      const newStep = Math.floor(Math.random() * noteNames.length);
+      newGameSequence.push(newStep);
+
+      setGameSequence(newGameSequence);
+      setUserSequence([]);
+    }
+
+    PubSub.publish(SEQUENCER_PLAY, newGameSequence);
   }
 
-  function onUserAttempt(padIndex: number) {
+  function onPadPress(padIndex: number) {
+    if (!isUsersAttempt || isSequencePlaying) return;
+    
+    setDidUserAttempt(true);
+    
     const newUserSequence = [...userSequence, padIndex];
     setUserSequence(newUserSequence);
   }
 
   useEffect(() => {
-    console.log({ gameSequence, userSequence });
+    if (!isUsersAttempt) return;
+
     const isMatch = userSequence.every((step, i) => step === gameSequence[i]);
-    if(!isMatch) { 
-      setUserHealth(userHealth - 1) 
+
+    if (!isMatch) {
+      setUserHealth(userHealth - 1);
+      setIsUsersAttempt(false);
+      setUserSequence([]);
+      
+      return;
     }
-  }, [userSequence, gameSequence]);
+
+    if (userSequence.length === gameSequence.length) {
+      setIsUsersAttempt(false);
+      setGameLevel(gameLevel + 1);
+      setUserSequence([]);
+    }
+  }, [userSequence, gameSequence, isUsersAttempt]);
 
   useEffect(() => {
     const onSequenceStarted = PubSub.subscribe(SEQUENCE_STARTED, () =>
-      setUiDisabled(true)
+      setIsSequencePlaying(true)
     );
-    const onSequenceEnded = PubSub.subscribe(SEQUENCE_ENDED, () =>
-      setUiDisabled(false)
-    );
+
+    const onSequenceEnded = PubSub.subscribe(SEQUENCE_ENDED, () => {
+      setIsSequencePlaying(false);
+      setIsUsersAttempt(true);
+      setDidUserAttempt(false);
+    });
+
     const onActivePadIndex = PubSub.subscribe(ACTIVE_PAD_INDEX, (_, padIndex) =>
       setActivePadIndex(padIndex)
     );
@@ -60,8 +92,8 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: "1em" }}>
-      <div>Health: {userHealth}</div>
+    <div style={{ padding: "1em" }} onClick={enableAudio}>
+      <div>Health: {userHealth} Level: {gameLevel -1}</div>
       <svg style={{ aspectRatio: 1 }} viewBox="0 0 300 300">
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
@@ -73,9 +105,9 @@ function App() {
         />
 
         <Pads
-          uiDisabled={uiDisabled}
+          isSequencePlaying={isSequencePlaying}
           activePadIndex={activePadIndex}
-          onUserAttempt={onUserAttempt}
+          onPadPress={onPadPress}
         />
       </svg>
     </div>

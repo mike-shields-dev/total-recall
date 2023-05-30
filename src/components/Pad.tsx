@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PubSub from "pubsub-js";
-import { NOTE_OFF, NOTE_ON } from '../AudioEngine/PubSubNameSpace';
+import { NOTE_OFF, NOTE_ON } from "../AudioEngine/PubSubNameSpace";
 import css from "./Pad.module.css";
 
 interface Props {
@@ -9,29 +9,36 @@ interface Props {
   classNames?: string;
   padIndex: number;
   activePadIndex: number;
-  uiDisabled: boolean;
-  onUserAttempt: (padIndex: number) => void;
+  isSequencePlaying: boolean;
+  onPadPress: (padIndex: number) => void;
 }
 
-const Pad = ({pathData, fill, classNames, padIndex, activePadIndex, uiDisabled, onUserAttempt}: Props) => {
+const Pad = ({
+  pathData,
+  fill,
+  classNames,
+  padIndex,
+  activePadIndex,
+  onPadPress,
+  isSequencePlaying,
+}: Props) => {
   const [isPadActive, setIsPadActive] = useState(false);
-  
+
   useEffect(() => {
     setIsPadActive(activePadIndex === padIndex);
   }, [activePadIndex]);
-  
-  const handleStartTone = (event: React.MouseEvent) => {
-    if(event.button !== 0) return;
-    if(uiDisabled) return;
-    onUserAttempt(padIndex);
+
+  const onMouseDown = (event: React.MouseEvent) => {
+    if (event.button !== 0 || isSequencePlaying) return;
+
+    onPadPress(padIndex);
     PubSub.publish(NOTE_ON, padIndex);
     setIsPadActive(true);
   };
 
-  const handleStopTone = (event: React.MouseEvent) => {
-    if(event.button !== 0) return;
-    if(uiDisabled) return;
-    
+  const onMouseUpOrLeave = (event: React.MouseEvent) => {
+    if (event.button !== 0 || isSequencePlaying) return;
+
     PubSub.publish(NOTE_OFF, padIndex);
     setIsPadActive(false);
   };
@@ -39,19 +46,19 @@ const Pad = ({pathData, fill, classNames, padIndex, activePadIndex, uiDisabled, 
   return (
     <svg>
       <path
-        onMouseDown={handleStartTone}
-        onMouseUp={handleStopTone}
-        onMouseLeave={handleStopTone}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUpOrLeave}
+        onMouseLeave={onMouseUpOrLeave}
         onContextMenu={(e) => e.preventDefault()}
         d={pathData}
         className={`
           ${css.Pad} ${classNames || ""} 
-          ${isPadActive ? css.active : ''} 
+          ${isPadActive ? css.active : ""} 
         `}
         fill={fill}
       />
     </svg>
-  )
-}
+  );
+};
 
 export default Pad;
