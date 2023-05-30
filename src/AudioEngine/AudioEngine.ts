@@ -1,10 +1,10 @@
 import { Transport, Sequence } from "tone";
 import { noteNames, BPM } from "../globals";
 import PubSub from 'pubsub-js';
-import { SEQUENCER_PLAY, SEQUENCE_ENDED, ACTIVE_PAD_INDEX, NOTE_ON, NOTE_OFF } from "./PubSubNameSpace";
+import { SEQUENCE_PLAY, SEQUENCE_ENDED, ACTIVE_PAD_INDEX, NOTE_ON, NOTE_OFF } from "./PubSubNameSpace";
 import synth from "./Synth";
 
-PubSub.subscribe(SEQUENCER_PLAY, (_, sequence) => playSequence(sequence));
+PubSub.subscribe(SEQUENCE_PLAY, (_, sequence) => playSequence(sequence));
 PubSub.subscribe(NOTE_ON, (_, noteIndex) => noteOn(noteIndex));
 PubSub.subscribe(NOTE_OFF, (_, noteIndex) => noteOff(noteIndex));
 

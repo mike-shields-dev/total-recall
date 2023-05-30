@@ -3,7 +3,7 @@ import { start as enableAudio } from "tone";
 import PubSub from "pubsub-js";
 import {
   ACTIVE_PAD_INDEX,
-  SEQUENCER_PLAY,
+  SEQUENCE_PLAY,
   SEQUENCE_ENDED,
   SEQUENCE_STARTED,
 } from "./AudioEngine/PubSubNameSpace";
@@ -37,7 +37,7 @@ function App() {
       setUserSequence([]);
     }
 
-    PubSub.publish(SEQUENCER_PLAY, newGameSequence);
+    PubSub.publish(SEQUENCE_PLAY, newGameSequence);
   }
 
   function onPadPress(padIndex: number) {
