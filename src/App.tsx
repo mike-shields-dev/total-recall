@@ -6,6 +6,7 @@ import {
   SEQUENCE_PLAY,
   SEQUENCE_ENDED,
   SEQUENCE_STARTED,
+  FAILED_ATTEMPT,
 } from "./AudioEngine/PubSubNameSpace";
 import Pads from "./components/Pads";
 import { noteNames, startingHealth } from "./globals";
@@ -25,12 +26,10 @@ function App() {
     if (isSequencePlaying) return;
     if(!didUserAttempt) setUserHealth(userHealth - 1);
 
-    setIsSequencePlaying(true);
-
     const newGameSequence = [...gameSequence];
 
     if (newGameSequence.length < gameLevel) {
-      const newStep = Math.floor(Math.random() * noteNames.length);
+      const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
       newGameSequence.push(newStep);
 
       setGameSequence(newGameSequence);
@@ -58,7 +57,7 @@ function App() {
       setUserHealth(userHealth - 1);
       setIsUsersAttempt(false);
       setUserSequence([]);
-      
+      PubSub.publish(FAILED_ATTEMPT, userSequence);
       return;
     }
 
