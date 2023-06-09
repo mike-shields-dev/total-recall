@@ -7,7 +7,7 @@ import {
   SEQUENCE_ENDED,
   SEQUENCE_STARTED,
   FAILED_ATTEMPT,
-} from "./AudioEngine/PubSubNameSpace";
+} from "./AudioEngine/PubSub_topics";
 import Pads from "./components/Pads";
 import Header from "./components/Header";
 import { noteNames, startingHealth } from "./globals";
