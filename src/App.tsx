@@ -21,26 +21,27 @@ function App() {
   const [userSequence, setUserSequence] = useState<number[]>([]);
   const [userHealth, setUserHealth] = useState(startingHealth);
   const [isUsersAttempt, setIsUsersAttempt] = useState(false);
-  const [didUserAttempt, setDidUserAttempt] = useState(true);
   const [gameLevel, setGameLevel] = useState(1);
+  const [hasSequenceBeenPlayed, setHasSequenceBeenPlayed] = useState(false);
 
   function handleStart() {
     if (isSequencePlaying) return;
-    if(!didUserAttempt) setUserHealth(userHealth - 1);
-    
+    if (hasSequenceBeenPlayed) setUserHealth(userHealth - 1);
+
     setUserSequence([]);
 
-    const newGameSequence = [...gameSequence];
+    let newGameSequence = [...gameSequence];
 
-    while(newGameSequence.length < gameLevel) {
+    while (newGameSequence.length < gameLevel) {
       const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
       const lastTwoSteps = gameSequence.slice(-2);
-      
-      if(`${lastTwoSteps}` !== `${[newStep, newStep]}`) {
-        newGameSequence.push(newStep);
-        setGameSequence(newGameSequence);
+
+      if (`${lastTwoSteps}` !== `${[newStep, newStep]}`) {
+        newGameSequence = [...newGameSequence, newStep];
       }
     }
+
+    setGameSequence(newGameSequence);
 
     if (newGameSequence.length < gameLevel) {
       const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
@@ -55,9 +56,7 @@ function App() {
 
   function onPadPress(padIndex: number) {
     if (!isUsersAttempt || isSequencePlaying) return;
-    
-    setDidUserAttempt(true);
-    
+
     const newUserSequence = [...userSequence, padIndex];
     setUserSequence(newUserSequence);
   }
@@ -79,6 +78,7 @@ function App() {
       setIsUsersAttempt(false);
       setGameLevel(gameLevel + 1);
       setUserSequence([]);
+      setHasSequenceBeenPlayed(false);
     }
   }, [userSequence, gameSequence, isUsersAttempt]);
 
@@ -89,8 +89,8 @@ function App() {
 
     const onSequenceEnded = PubSub.subscribe(SEQUENCE_ENDED, () => {
       setIsSequencePlaying(false);
+      setHasSequenceBeenPlayed(true);
       setIsUsersAttempt(true);
-      setDidUserAttempt(false);
     });
 
     const onActivePadIndex = PubSub.subscribe(ACTIVE_PAD_INDEX, (_, padIndex) =>
@@ -105,9 +105,15 @@ function App() {
   }, []);
 
   return (
-    <main onClick={enableAudio} style={{ height: "100vh", display: 'grid', placeContent: "center"}}>
+    <main
+      onClick={enableAudio}
+      style={{ height: "100vh", display: "grid", placeContent: "center" }}
+    >
       <Header health={userHealth} level={gameLevel} />
-      <svg style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }} viewBox="0 0 300 300">
+      <svg
+        style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }}
+        viewBox="0 0 300 300"
+      >
         <circle cx={150} cy={150} r={150} />
         <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
         <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
