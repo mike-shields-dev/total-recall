@@ -28,7 +28,19 @@ function App() {
     if (isSequencePlaying) return;
     if(!didUserAttempt) setUserHealth(userHealth - 1);
 
+    setUserSequence([]);
+
     const newGameSequence = [...gameSequence];
+
+    while(newGameSequence.length < gameLevel) {
+      const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
+      const lastTwoSteps = gameSequence.slice(-2);
+      
+      if(`${lastTwoSteps}` !== `${[newStep, newStep]}`) {
+        newGameSequence.push(newStep);
+        setGameSequence(newGameSequence);
+      }
+    }
 
     if (newGameSequence.length < gameLevel) {
       const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
