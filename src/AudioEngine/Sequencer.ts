@@ -5,36 +5,16 @@ import {
   SEQUENCE_PLAY,
   SEQUENCE_ENDED,
   ACTIVE_PAD_INDEX,
-  NOTE_ON,
-  NOTE_OFF,
   SEQUENCE_STARTED,
   FAILED_ATTEMPT,
-} from "./PubSubNameSpace";
-import synth from "./Synth";
+} from "./PubSub_topics";
+import { synth, clearActiveNotes } from "./Synth";
 
 PubSub.subscribe(SEQUENCE_PLAY, (_, sequence) => playSequence(sequence));
-PubSub.subscribe(NOTE_ON, (_, noteIndex) => noteOn(noteIndex));
-PubSub.subscribe(NOTE_OFF, (_, noteIndex) => noteOff(noteIndex));
+
 PubSub.subscribe(FAILED_ATTEMPT, (_, userSequence) =>
   playFailedAttemptAlert(userSequence)
 );
-
-let activeNotes: number[] = [];
-
-function noteOn(noteIndex: number) {
-  if (activeNotes.includes(noteIndex)) return;
-
-  synth.triggerAttack(noteNames[noteIndex]);
-  activeNotes.push(noteIndex);
-}
-
-function noteOff(noteIndex: number) {
-  const isExistingTone = activeNotes.includes(noteIndex);
-  if (!isExistingTone) return;
-
-  synth.triggerRelease();
-  activeNotes = activeNotes.filter((activeNote) => activeNote !== noteIndex);
-}
 
 function resetTransport() {
   Transport.stop().cancel();
@@ -73,7 +53,7 @@ function playSequence(noteIndexSequence: number[]) {
 function playFailedAttemptAlert(userSequence: number[]) {
   const bpm = 20;
   synth.triggerRelease(0);
-  activeNotes = [];
+  clearActiveNotes();
   resetTransport();
   Transport.set({ bpm });
 
