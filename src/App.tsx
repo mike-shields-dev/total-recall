@@ -27,7 +27,7 @@ function App() {
   function handleStart() {
     if (isSequencePlaying) return;
     if(!didUserAttempt) setUserHealth(userHealth - 1);
-
+    
     setUserSequence([]);
 
     const newGameSequence = [...gameSequence];
