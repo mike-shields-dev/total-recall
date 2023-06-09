@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PubSub from "pubsub-js";
-import { NOTE_OFF, NOTE_ON } from "../AudioEngine/PubSubNameSpace";
+import { NOTE_OFF, NOTE_ON } from "../AudioEngine/PubSub_topics";
 import css from "./Pad.module.css";
 
 interface Props {
