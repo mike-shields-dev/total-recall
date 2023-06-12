@@ -14,6 +14,7 @@ import { padNoteNames, startingHealth } from "./globals";
 import StartButton from "./components/StartButton";
 
 import "./App.css";
+import Chassis from "./components/Chassis";
 
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
@@ -108,7 +109,7 @@ function App() {
         style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }}
         viewBox="0 0 300 300"
       >
-        <circle cx={150} cy={150} r={150} />
+        <Chassis />
         <StartButton isDisabled={isSequencePlaying} onClick={handleStart}/>
         <Pads
           isSequencePlaying={isSequencePlaying}
