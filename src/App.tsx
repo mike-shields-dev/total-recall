@@ -20,7 +20,7 @@ function App() {
   const [gameSequence, setGameSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
   const [userHealth, setUserHealth] = useState(startingHealth);
-  const [isUsersAttempt, setIsUsersAttempt] = useState(false);
+  const [canUserAttempt, setIsUsersAttempt] = useState(false);
   const [gameLevel, setGameLevel] = useState(1);
   const [hasSequenceBeenPlayed, setHasSequenceBeenPlayed] = useState(false);
 
@@ -55,14 +55,14 @@ function App() {
   }
 
   function onPadPress(padIndex: number) {
-    if (!isUsersAttempt || isSequencePlaying) return;
+    if (!canUserAttempt || isSequencePlaying) return;
 
     const newUserSequence = [...userSequence, padIndex];
     setUserSequence(newUserSequence);
   }
 
   useEffect(() => {
-    if (!isUsersAttempt) return;
+    if (!canUserAttempt) return;
 
     const isMatch = userSequence.every((step, i) => step === gameSequence[i]);
 
@@ -80,7 +80,7 @@ function App() {
       setUserSequence([]);
       setHasSequenceBeenPlayed(false);
     }
-  }, [userSequence, gameSequence, isUsersAttempt]);
+  }, [userSequence, gameSequence, canUserAttempt]);
 
   useEffect(() => {
     const onSequenceStarted = PubSub.subscribe(SEQUENCE_STARTED, () =>
