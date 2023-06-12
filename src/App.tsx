@@ -42,14 +42,7 @@ function App() {
     }
 
     setGameSequence(newGameSequence);
-
-    if (newGameSequence.length < gameLevel) {
-      const newStep = Math.floor(Math.random() * padNoteNames.length);
-      newGameSequence.push(newStep);
-
-      setGameSequence(newGameSequence);
-      setUserSequence([]);
-    }
+    setUserSequence([]);
 
     PubSub.publish(SEQUENCE_PLAY, newGameSequence);
   }
