@@ -11,6 +11,7 @@ import {
 import Pads from "./components/Pads";
 import Header from "./components/Header";
 import { padNoteNames, startingHealth } from "./globals";
+import StartButton from "./components/StartButton";
 
 import "./App.css";
 
@@ -20,7 +21,7 @@ function App() {
   const [gameSequence, setGameSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
   const [userHealth, setUserHealth] = useState(startingHealth);
-  const [canUserAttempt, setIsUsersAttempt] = useState(false);
+  const [canUserAttempt, setCanUserAttempt] = useState(false);
   const [gameLevel, setGameLevel] = useState(1);
   const [hasSequenceBeenPlayed, setHasSequenceBeenPlayed] = useState(false);
 
@@ -108,14 +109,7 @@ function App() {
         viewBox="0 0 300 300"
       >
         <circle cx={150} cy={150} r={150} />
-        <circle cx={150} cy={150} r={55} fill="grey" onClick={handleStart} />
-        <circle onClick={handleStart} cx={150} cy={150} r={10} fill="red" />
-        <path
-          d="M 145 145 L 154 150 L145 155 z"
-          transform="translate(2, 0)"
-          pointerEvents="none"
-        />
-
+        <StartButton isDisabled={isSequencePlaying} onClick={handleStart}/>
         <Pads
           isSequencePlaying={isSequencePlaying}
           activePadIndex={activePadIndex}

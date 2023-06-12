@@ -1,0 +1,11 @@
+.startBtn {
+  transition: fill 0.25s ease;
+}
+
+.active {
+  fill: #e7e7e7;
+}
+
+.disabled {
+  fill: #666;
+}
