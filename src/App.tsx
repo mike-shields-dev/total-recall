@@ -10,7 +10,7 @@ import {
 } from "./AudioEngine/PubSub_topics";
 import Pads from "./components/Pads";
 import Header from "./components/Header";
-import { noteNames, startingHealth } from "./globals";
+import { padNoteNames, startingHealth } from "./globals";
 
 import "./App.css";
 
@@ -33,7 +33,7 @@ function App() {
     let newGameSequence = [...gameSequence];
 
     while (newGameSequence.length < gameLevel) {
-      const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
+      const newStep = Math.floor(Math.random() * padNoteNames.length);
       const lastTwoSteps = gameSequence.slice(-2);
 
       if (`${lastTwoSteps}` !== `${[newStep, newStep]}`) {
@@ -44,7 +44,7 @@ function App() {
     setGameSequence(newGameSequence);
 
     if (newGameSequence.length < gameLevel) {
-      const newStep = Math.floor(Math.random() * noteNames.slice(0, -1).length);
+      const newStep = Math.floor(Math.random() * padNoteNames.length);
       newGameSequence.push(newStep);
 
       setGameSequence(newGameSequence);
