@@ -61,14 +61,14 @@ function App() {
 
     if (!isMatch) {
       setUserHealth(userHealth - 1);
-      setIsUsersAttempt(false);
+      setCanUserAttempt(false);
       setUserSequence([]);
       PubSub.publish(FAILED_ATTEMPT, userSequence);
       return;
     }
 
     if (userSequence.length === gameSequence.length) {
-      setIsUsersAttempt(false);
+      setCanUserAttempt(false);
       setGameLevel(gameLevel + 1);
       setUserSequence([]);
       setHasSequenceBeenPlayed(false);
@@ -83,7 +83,7 @@ function App() {
     const onSequenceEnded = PubSub.subscribe(SEQUENCE_ENDED, () => {
       setIsSequencePlaying(false);
       setHasSequenceBeenPlayed(true);
-      setIsUsersAttempt(true);
+      setCanUserAttempt(true);
     });
 
     const onActivePadIndex = PubSub.subscribe(ACTIVE_PAD_INDEX, (_, padIndex) =>
