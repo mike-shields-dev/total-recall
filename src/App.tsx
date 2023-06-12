@@ -8,13 +8,11 @@ import {
   SEQUENCE_STARTED,
   FAILED_ATTEMPT,
 } from "./AudioEngine/PubSub_topics";
-import Pads from "./components/Pads";
-import Header from "./components/Header";
 import { padNoteNames, startingHealth } from "./globals";
-import StartButton from "./components/StartButton";
+import Header from "./components/Header";
 
 import "./App.css";
-import Chassis from "./components/Chassis";
+import GameUI from "./components/GameUI";
 
 function App() {
   const [activePadIndex, setActivePadIndex] = useState<number>(-1);
@@ -105,18 +103,12 @@ function App() {
       style={{ height: "100vh", display: "grid", placeContent: "center" }}
     >
       <Header health={userHealth} level={gameLevel} />
-      <svg
-        style={{ aspectRatio: 1, width: "min(90vw, 90vh)" }}
-        viewBox="0 0 300 300"
-      >
-        <Chassis />
-        <StartButton isDisabled={isSequencePlaying} onClick={handleStart}/>
-        <Pads
-          isSequencePlaying={isSequencePlaying}
-          activePadIndex={activePadIndex}
-          onPadPress={onPadPress}
-        />
-      </svg>
+      <GameUI
+        activePadIndex={activePadIndex}
+        handleStart={handleStart}
+        isUIDisabled={isSequencePlaying}
+        onPadPress={onPadPress}
+      />
     </main>
   );
 }
