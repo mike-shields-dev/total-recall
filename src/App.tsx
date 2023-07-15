@@ -11,7 +11,7 @@ import {
 import { padNoteNames, startingHealth } from "./globals";
 import Header from "./components/Header";
 
-import "./App.css";
+import css from "./App.module.css";
 import GameUI from "./components/GameUI";
 
 function App() {
@@ -100,7 +100,7 @@ function App() {
   return (
     <main
       onClick={enableAudio}
-      style={{ height: "100vh", display: "grid", placeContent: "center" }}
+      className={css.Main}
     >
       <Header health={userHealth} level={gameLevel} />
       <GameUI

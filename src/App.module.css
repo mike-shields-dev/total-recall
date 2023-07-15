@@ -1,0 +1,8 @@
+.Main {
+  display: grid;
+  grid-template-rows: auto;
+}
+
+.Main > * {
+  border: 1px solid red;
+}
